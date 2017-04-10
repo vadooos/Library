@@ -1,10 +1,14 @@
 package library.models;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class BookInstance {
+public class BookInstance implements Externalizable{
     private Book book;
     private UUID number;
 
@@ -43,5 +47,20 @@ public class BookInstance {
     @Override
     public String toString() {
         return book + "@" + number;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(book);
+        out.writeObject(number);
+        out.writeUTF("vadim");
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        this.book = (Book)in.readObject();
+        this.number = (UUID) in.readObject();
+        System.out.println(in.readUTF());
     }
 }

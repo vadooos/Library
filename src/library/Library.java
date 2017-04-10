@@ -14,6 +14,10 @@ public class Library {
     private Set<Reader> readers;
     private Set<Booking> bookings;
 
+    public Set<Reader> getReaders() {
+        return readers;
+    }
+
     public Library() {
         catalog = new HashSet<>(1024);
         store = new HashSet<>(4096);
@@ -48,6 +52,8 @@ public class Library {
         }
 
         BookInstance bookInstance = (BookInstance) store.stream().filter((s)->s.getBook().getTitle().equals(title)).toArray()[0];//findFirst
+        // bookInstance = (BookInstance)store.stream().findFirst((s)->s.getBook().getTitle().equals(title));
+
         if (bookInstance == null) {
             System.out.println("No such book");
             return;

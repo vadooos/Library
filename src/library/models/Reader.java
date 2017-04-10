@@ -1,7 +1,12 @@
 package library.models;
 
 
-public class Reader {
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+public class Reader implements Externalizable{
     private String firstName;
     private String secondName;
     private String lastName;
@@ -50,5 +55,23 @@ public class Reader {
 
     public void setPassportNumber(long passportNumber) {
         this.passportNumber = passportNumber;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(firstName);
+        out.writeObject(secondName);
+        out.writeObject(lastName);
+        out.writeObject(passportNumber);
+        out.writeUTF("vadim");
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.firstName = (String) in.readObject();
+        this.secondName = (String) in.readObject();
+        this.lastName = (String) in.readObject();
+        this.passportNumber = (long) in.readObject();
+        System.out.println(in.readUTF());
     }
 }

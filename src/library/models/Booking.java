@@ -72,10 +72,16 @@ public class Booking implements Serializable, Externalizable{
         out.writeObject(startDate);
         out.writeObject(finishDate);
         out.writeObject(returnDate);
+        out.writeUTF("vadim");
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
+        this.bookInstance = (BookInstance) in.readObject();
+        this.reader = (Reader) in.readObject();
+        this.startDate = (Date) in.readObject();
+        this.finishDate = (Date) in.readObject();
+        this.returnDate = (Date) in.readObject();
+        System.out.println(in.readUTF());
     }
 }

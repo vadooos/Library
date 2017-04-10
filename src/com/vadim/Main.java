@@ -2,10 +2,10 @@ package com.vadim;
 
 import library.Library;
 import library.models.Book;
-import library.models.Booking;
 import library.models.Reader;
 import library.utils.DataManager;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Main {
@@ -14,16 +14,11 @@ public class Main {
 
         Library library = new Library();
 
-        for(Book book : DataManager.deserialize())
+
+        Set<Book> books = new HashSet<>();
+        books = DataManager.deserialize(books, "books.txt");
+        for(Book book : books)
             library.buyBook(book.getTitle(), book.getAuthor(), book.getIsbn(), 1, book.getYear());
-        //Set<Book> bookSet = DataManager.deserializeExternal2("books.txt");//
-
-        //Set<Book> bookSet = null;
-        //bookSet =  DataManager.universalDeserialize2( "");
-
-
-
-
 
 
         Reader john = new Reader("John", "Connor", "Androidovich", 12345678);
@@ -42,9 +37,8 @@ public class Main {
 
         library.showAllData();
 
-        DataManager.serializeToFile(library.getCatalog());
-        //DataManager.serializeExternal(library.getCatalog());
-        //DataManager.serializeExternal2(library.getCatalog(), "books.txt");
+        //DataManager.serializeExternal(library.getCatalog(), "books.txt");
+        DataManager.serializeToFile(library.getCatalog(), "books.txt");
 
 
     }
