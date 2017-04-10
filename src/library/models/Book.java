@@ -1,8 +1,8 @@
 package library.models;
 
-import java.io.Serializable;
+import java.io.*;
 
-public class Book implements Serializable {
+public class Book implements Serializable, Externalizable {
     private String author;
     private String title;
     private int year;
@@ -32,6 +32,10 @@ public class Book implements Serializable {
         this.isbn = isbn;
     }
 
+    public Book(){
+
+    }
+
     @Override
     public int hashCode() {
         return isbn.hashCode();
@@ -54,5 +58,23 @@ public class Book implements Serializable {
     @Override
     public String toString() {
         return author + "@" + title + "@" + year + "@" + isbn;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeUTF(author);
+        out.writeUTF(title);
+        out.writeInt(year);
+        out.writeObject(isbn);
+        out.writeUTF("vadim");
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.author = (String) in.readUTF();
+        this.title = (String) in.readUTF();
+        this.year = in.readInt();
+        this.isbn = (String) in.readObject();
+        System.out.println(in.readUTF());
     }
 }

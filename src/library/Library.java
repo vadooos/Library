@@ -31,9 +31,13 @@ public class Library {
         }
     }
 
+    public Set<BookInstance> getStore() {
+        return store;
+    }
+
     public void takeBook(String firstName, String secondName, String lastName, long passportNumber,
                          String title) {
-        Object[] reader = readers.stream().filter((r)->r.getPassportNumber() == passportNumber).toArray();
+        Object[] reader = readers.stream().filter((r)->r.getPassportNumber() == passportNumber).toArray();//findFirst
 
         Reader tempReader = null;
         if (reader.length != 0) {
@@ -43,7 +47,7 @@ public class Library {
             readers.add(tempReader);
         }
 
-        BookInstance bookInstance = (BookInstance) store.stream().filter((s)->s.getBook().getTitle().equals(title)).toArray()[0];
+        BookInstance bookInstance = (BookInstance) store.stream().filter((s)->s.getBook().getTitle().equals(title)).toArray()[0];//findFirst
         if (bookInstance == null) {
             System.out.println("No such book");
             return;
@@ -61,7 +65,7 @@ public class Library {
                            String title) {
         Reader reader = new Reader(firstName, secondName, lastName, passportNumber);
         Booking booking = (Booking) bookings.stream().filter((b)->b.getBookInstance().getBook().getTitle().equals(title) &&
-                                                    b.getReader().equals(reader)).toArray()[0];
+                                                    b.getReader().equals(reader)).toArray()[0];//
         if (booking == null) {
             System.out.println("No such booking");
             return;

@@ -1,8 +1,9 @@
 package library.models;
 
+import java.io.*;
 import java.util.Date;
 
-public class Booking {
+public class Booking implements Serializable, Externalizable{
     private BookInstance bookInstance;
     private Reader reader;
     private Date startDate;
@@ -62,5 +63,19 @@ public class Booking {
 
     public Reader getReader() {
         return reader;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(bookInstance);
+        out.writeObject(reader);
+        out.writeObject(startDate);
+        out.writeObject(finishDate);
+        out.writeObject(returnDate);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
     }
 }
