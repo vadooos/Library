@@ -12,8 +12,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Library library = new Library();
+        Book book1 = new Book("Schildt", "Intro to Java", 2017, "1241241ada");
+        book1.print();
 
+        String bookXml = book1.getClassXml();
+
+
+       /* Library library = new Library();
 
         Set<Book> books = new HashSet<>();
         books = DataManager.deserialize(books, "books.txt");
@@ -39,7 +44,7 @@ public class Main {
 
         //DataManager.serializeExternal(library.getCatalog(), "books.txt");
         DataManager.serializeToFile(library.getCatalog(), "books.txt");
-
+*/
 
     }
 }

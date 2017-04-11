@@ -3,8 +3,12 @@ package tests;
 import library.Library;
 import library.models.Book;
 import library.models.BookInstance;
+import library.models.Booking;
 import library.models.Reader;
 import org.junit.jupiter.api.*;
+
+import java.util.Date;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,6 +64,7 @@ class MainTest {
 
     @Test
     public void takeBookReadersTest(){
+        assertEquals(0, library.getReaders().size());
         Reader reader = new Reader("John", "Connor", "Androidovich", 12345678);
         library.buyBook( "Intro to Java", "Schildt", "1241241ada", 5, 2017 );
         library.takeBook("John", "Connor", "Androidovich", 12345678, "Intro to Java");
@@ -68,6 +73,31 @@ class MainTest {
         assertTrue(library.getReaders().contains(reader));
         assertEquals(reader, readerFromReaders);
 
+    }
+
+    @Test
+    public void takeBookBookingsTest(){
+        assertEquals(0, library.getBookings().size());
+        Book book = new Book("Schildt", "Intro to Java", 2017, "1241241ada");
+        Reader reader = new Reader("John", "Connor", "Androidovich", 12345678);
+        library.buyBook( "Intro to Java", "Schildt", "1241241ada", 5, 2017 );
+        library.takeBook("John", "Connor", "Androidovich", 12345678, "Intro to Java");
+        Booking boooking = new Booking(new BookInstance(book, UUID.randomUUID()), reader, new Date(), new Date());
+        assertEquals(1, library.getBookings().size());
+    }
+
+    @Test
+    public void takeBookStoreTest(){
+
+    }
+
+    @Test
+    public void returnBookBookingsTest(){
+
+    }
+
+    @Test
+    public void returnBookStoreTest(){
 
     }
 

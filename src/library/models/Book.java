@@ -1,6 +1,21 @@
 package library.models;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 public class Book implements Serializable, Externalizable {
     private String author;
@@ -25,6 +40,7 @@ public class Book implements Serializable, Externalizable {
         return title;
     }
 
+
     public Book(String author, String title, int year, String isbn) {
         this.author = author;
         this.title = title;
@@ -33,6 +49,32 @@ public class Book implements Serializable, Externalizable {
     }
 
     public Book(){
+
+    }
+
+    public void print(){
+        System.out.println(Book.class.getCanonicalName());
+        for (Method met :
+                this.getClass().getMethods()) {
+            System.out.println(met.getName());
+            System.out.println(met.getReturnType().getName());
+            for (Parameter param:
+                 met.getParameters()) {
+                System.out.println(param.getName() + " " + param.getType().getName());
+            }
+            System.out.println(met.getModifiers());
+        }
+        try {
+            for (Field field :
+                    Class.forName("library.models.Book").getFields()) {
+                System.out.println(field.getName());
+                System.out.println(field.getType().getName());
+                System.out.println(field.isAccessible());
+
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -77,4 +119,56 @@ public class Book implements Serializable, Externalizable {
         this.isbn = (String) in.readObject();
         System.out.println(in.readUTF());
     }
+
+    public String getClassXml(){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = null;
+            dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+
+            Element rootElement = doc.createElement("Book");
+            Element fieldsElement = doc.createElement("Fields");
+            Element methodsElement = doc.createElement("Methods");
+
+            doc.appendChild(rootElement);
+            rootElement.appendChild(fieldsElement);
+            rootElement.appendChild(methodsElement);
+
+            Class c = this. getClass();
+            Field[] f = this.getClass().getDeclaredFields();
+            for (Field field :
+                    this.getClass().getDeclaredFields()) {
+                Element el = doc.createElement("Field");
+                el.setAttribute("Name", field.getName());
+                fieldsElement.appendChild(el);
+            }
+
+            for (Method met :
+                    this.getClass().getMethods()) {
+                Element el = doc.createElement("Method");
+                el.setAttribute("Name", met.getName());
+                methodsElement.appendChild(el);
+            }
+
+
+
+
+            TransformerFactory transformerFactory =
+                    TransformerFactory.newInstance();
+            Transformer transformer =
+                    transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+
+            StreamResult consoleResult =
+                    new StreamResult(System.out);
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, consoleResult);
+
+        } catch (Exception ex){
+
+        }
+        return "";
+    }
+
 }

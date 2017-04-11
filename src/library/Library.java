@@ -115,4 +115,7 @@ public class Library {
         }
     }
 
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
 }
