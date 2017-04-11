@@ -3,6 +3,7 @@ package library.models;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import sun.awt.SunHints;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -127,13 +128,17 @@ public class Book implements Serializable, Externalizable {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
 
-            Element rootElement = doc.createElement("Book");
+            Element rootElement = doc.createElement("Books");
+            Element bookElement = doc.createElement("Book");
             Element fieldsElement = doc.createElement("Fields");
             Element methodsElement = doc.createElement("Methods");
 
+
             doc.appendChild(rootElement);
-            rootElement.appendChild(fieldsElement);
-            rootElement.appendChild(methodsElement);
+            rootElement.appendChild(bookElement);
+            bookElement.appendChild(fieldsElement);
+            bookElement.appendChild(methodsElement);
+
 
             Class c = this. getClass();
             Field[] f = this.getClass().getDeclaredFields();
@@ -141,18 +146,25 @@ public class Book implements Serializable, Externalizable {
                     this.getClass().getDeclaredFields()) {
                 Element el = doc.createElement("Field");
                 el.setAttribute("Name", field.getName());
+
                 fieldsElement.appendChild(el);
             }
+
 
             for (Method met :
                     this.getClass().getMethods()) {
                 Element el = doc.createElement("Method");
                 el.setAttribute("Name", met.getName());
+
+                /*for (Parameter param:
+                        met.getParameters()) {
+                    Element elP = doc.createElement("Parameter");
+                    el.setAttribute("Name", param.getName());
+                    el.appendChild(elP);
+                }*/
+
                 methodsElement.appendChild(el);
             }
-
-
-
 
             TransformerFactory transformerFactory =
                     TransformerFactory.newInstance();
